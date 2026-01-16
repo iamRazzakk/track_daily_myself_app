@@ -1,6 +1,6 @@
+import { useRouter } from 'expo-router';
 import { Alert, Image, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRouter } from 'expo-router';
 
 import { ThemedText } from '@/components/themed-text';
 import { useAuth } from '@/contexts/auth-context';
@@ -53,7 +53,7 @@ export default function ProfileScreen() {
           
           <TouchableOpacity 
             style={styles.editButton}
-            onPress={() => router.push('/edit-profile')}
+            onPress={() => router.push('/(app)/edit-profile')}
           >
             <ThemedText style={styles.editButtonText}>Edit Profile</ThemedText>
           </TouchableOpacity>

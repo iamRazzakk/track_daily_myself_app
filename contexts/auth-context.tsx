@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { PropsWithChildren, createContext, useContext, useEffect, useMemo, useState, useRef } from 'react';
+import { PropsWithChildren, createContext, useContext, useEffect, useMemo, useRef, useState } from 'react';
 
 import api, { setAuthToken } from '@/services/api-client';
 
@@ -40,7 +40,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
   const [token, setToken] = useState<string | null>(null);
   const [refreshToken, setRefreshToken] = useState<string | null>(null);
   const [status, setStatus] = useState<'loading' | 'ready'>('loading');
-  const refreshTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const refreshTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Schedule token refresh (refresh 1 minute before expiry)
   const scheduleTokenRefresh = (expiresIn: number) => {
