@@ -42,7 +42,6 @@ app-example
 /ios
 /android
 
-.env
 android/app/google-services.json
 ios/GoogleService-Info.plist
 ios/Pods/
@@ -55,3 +54,4 @@ gradle/
 gradlew
 gradlew.bat
 settings.gradle
+config.bat
