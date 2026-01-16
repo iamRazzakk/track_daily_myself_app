@@ -28,11 +28,13 @@ function NavigationShell() {
     if (status === 'loading') return;
 
     if (!user && !inAuthGroup) {
+      // Redirect to login if not authenticated and not in auth group
       router.replace('/(auth)/login');
     } else if (user && inAuthGroup) {
+      // Redirect to home if authenticated and in auth group
       router.replace('/(app)/home');
     }
-  }, [status, user, inAuthGroup, router]);
+  }, [status, user, inAuthGroup]);
 
   const theme = colorScheme === 'dark' ? DarkTheme : DefaultTheme;
 

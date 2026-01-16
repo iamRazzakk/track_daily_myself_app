@@ -1,9 +1,13 @@
-import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
 const api = axios.create({
-  baseURL: process.env.EXPO_PUBLIC_API_URL || 'http://localhost:5000/api',
-  timeout: 10000,
+  baseURL: process.env.EXPO_PUBLIC_API_URL || 'http://147.93.94.210:5000/api',
+  timeout: 15000,
+  validateStatus: function (status) {
+    // Don't throw on any status code
+    return true;
+  },
 });
 
 let authToken: string | null = null;
@@ -20,12 +24,21 @@ api.interceptors.request.use((config) => {
 });
 
 api.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    // Check for non-2xx status codes and reject
+    if (response.status >= 400) {
+      return Promise.reject(response);
+    }
+    return response;
+  },
   async (error) => {
+    const status = error.response?.status;
+    
     // Handle 401 Unauthorized - token expired or invalid
-    if (error.response?.status === 401) {
+    if (status === 401) {
       // Clear stored token
       await AsyncStorage.removeItem('auth_token');
+      await AsyncStorage.removeItem('refresh_token');
       setAuthToken(null);
       
       // Don't throw if it's a login/register attempt (expected 401)
@@ -37,7 +50,7 @@ api.interceptors.response.use(
       console.log('Session expired - redirecting to login');
     }
     
-    console.error('API error', error.response?.data || error.message);
+    console.error('API error:', error.response?.data || error.message);
     return Promise.reject(error);
   }
 );
